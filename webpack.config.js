@@ -7,42 +7,29 @@ const IconAssetPlugin = new CopyWebpackPlugin([
   { from: "src/assets/**", to: ".", flatten: true }
 ]);
 
-const production = process.env.NODE_ENV === "production";
+const HtmlWebpackPlugin = new Html({
+  template: './src/index.html',
+  filename: 'index.html',
+  inject: 'body',
+})
 
 module.exports = {
-  mode: production ? "production" : "development",
-  devtool: production ? "hidden-source-map" : "cheap-source-map",
-  entry: path.resolve(__dirname, "src/index.jsx"),
+  mode: 'production',
+  devtool: 'hidden-source-map',
+  target: 'web',
+  entry: './src/index.jsx',
   output: {
-    path: path.resolve(__dirname, "public"),
-    filename: "bundle.[name].js"
+    path: path.resolve('public'),
+    filename: 'bundle.js',
   },
+  plugins: [
+    HtmlWebpackPlugin,
+    IconAssetPlugin,
+    new CleanWebpackPlugin(),
+  ],
   resolve: {
     extensions: [".js", ".jsx"]
   },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ["babel-loader", "eslint-loader"]
-      },
-      {
-        test: /\.(svg|png|jpe?g|gif|ico)(\?\S*)?$/,
-        loader: "file-loader!url-loader"
-      },
-      { test: /\.css$/, loader: "style-loader!css-loader" }
-    ]
-  },
-  plugins: [
-    new Html({
-      template: "src/public/index.html",
-      favicon: "src/public/favicon.ico"
-    }),
-    IconAssetPlugin,
-    new CleanWebpackPlugin()
-  ],
-
   devServer: {
     host: "localhost",
     port: 3000,
