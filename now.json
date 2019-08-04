@@ -1,7 +1,6 @@
 {
   "version": 2,
   "name": "fine",
-  "alias": "fine.app",
   "build": {
     "env": {
       "SOME_SECRET": "some-secret"
